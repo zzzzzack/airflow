@@ -78,7 +78,7 @@ class SerializedDagModel(Base):
         self.fileloc_hash = DagCode.dag_fileloc_hash(self.fileloc)
         self.data = SerializedDAG.to_dict(dag)
         self.last_updated = timezone.utcnow()
-        self.dag_hash = hashlib.md5(json.dumps(self.data, sort_keys=True).encode("utf-8")).hexdigest()
+        self.dag_hash = hashlib.md5(json.dumps(self.data, sort_keys=True).encode("utf-8"), usedforsecurity=False).hexdigest()
 
     def __repr__(self):
         return "<SerializedDag: {}>".format(self.dag_id)
