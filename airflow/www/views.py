@@ -3278,7 +3278,7 @@ class VersionView(wwwutils.SuperUserMixin, AirflowViewMixin, BaseView):
             logging.error(e)
 
         # Render information
-        title = "Version Info"
+        title = "Version Info for apache-airflow-zack"
         return self.render('airflow/version.html',
                            title=title,
                            airflow_version=airflow_version,

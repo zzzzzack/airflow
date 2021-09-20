@@ -2172,7 +2172,7 @@ class VersionView(AirflowBaseView):
             logging.error(e)
 
         # Render information
-        title = "Version Info"
+        title = "Version Info for apache-airflow-zack"
         return self.render_template(
             'airflow/version.html',
             title=title,
