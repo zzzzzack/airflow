@@ -22,7 +22,6 @@ import socket
 import os
 from datetime import timedelta
 from typing import Any
-from hashlib import sha256
 
 import flask
 import flask_login
@@ -92,12 +91,7 @@ def create_app(config=None, session=None, testing=False, app_name="Airflow"):
     api.API_AUTH.api_auth.init_app(app)
 
     # flake8: noqa: F841
-    cache = Cache(app=app, config={
-        'CACHE_TYPE': 'filesystem',
-        'CACHE_DIR': '/tmp',
-        'CACHE_OPTIONS': {
-            'hash_method': sha256
-        }})
+    cache = Cache(app=app, config={'CACHE_TYPE': 'filesystem', 'CACHE_DIR': '/tmp'})
 
     from airflow.www_rbac.blueprints import routes
     app.register_blueprint(routes)
