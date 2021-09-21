@@ -655,7 +655,7 @@ INSTALL_REQUIREMENTS = [
     'typing-extensions>=3.7.4;python_version<"3.8"',
     'tzlocal>=1.4,<2.0.0',
     'unicodecsv>=0.14.1',
-    'werkzeug~=1.0,>=1.0.1',
+    'werkzeug<1.0.0',
     'zope.deprecation>=4.0, <5.0',
 ]
 
@@ -674,7 +674,7 @@ def do_setup():
         long_description=long_description,
         long_description_content_type='text/markdown',
         license='Apache License 2.0',
-        version='1.10.15.4',
+        version='1.10.15.3',
         packages=find_packages(exclude=['tests*', 'airflow.upgrade*']),
         package_data={
             '': ['airflow/alembic.ini', "airflow/git_version", "*.ipynb",
