@@ -36,6 +36,8 @@ import wtforms
 from wtforms.compat import text_type
 
 from flask import after_this_request, request, Markup, Response
+from flask_admin.model import filters
+import flask_admin.contrib.sqla.filters as sqlafilters
 from flask_login import current_user
 from six.moves.urllib.parse import urlencode
 
@@ -444,6 +446,50 @@ class AceEditorWidget(wtforms.widgets.TextArea):
             form_name=field.id,
         )
         return wtforms.widgets.core.HTMLString(html)
+
+
+class UtcDateTimeFilterMixin(object):
+    def clean(self, value):
+        dt = super(UtcDateTimeFilterMixin, self).clean(value)
+        if isinstance(dt, list):
+            return [timezone.make_aware(d, timezone=timezone.utc) for d in dt]
+        return timezone.make_aware(dt, timezone=timezone.utc)
+
+
+class UtcDateTimeEqualFilter(UtcDateTimeFilterMixin, sqlafilters.DateTimeEqualFilter):
+    pass
+
+
+class UtcDateTimeNotEqualFilter(UtcDateTimeFilterMixin, sqlafilters.DateTimeNotEqualFilter):
+    pass
+
+
+class UtcDateTimeGreaterFilter(UtcDateTimeFilterMixin, sqlafilters.DateTimeGreaterFilter):
+    pass
+
+
+class UtcDateTimeSmallerFilter(UtcDateTimeFilterMixin, sqlafilters.DateTimeSmallerFilter):
+    pass
+
+
+class UtcDateTimeBetweenFilter(UtcDateTimeFilterMixin, sqlafilters.DateTimeBetweenFilter):
+    pass
+
+
+class UtcDateTimeNotBetweenFilter(UtcDateTimeFilterMixin, sqlafilters.DateTimeNotBetweenFilter):
+    pass
+
+
+class UtcFilterConverter(sqlafilters.FilterConverter):
+
+    utcdatetime_filters = (UtcDateTimeEqualFilter, UtcDateTimeNotEqualFilter,
+                           UtcDateTimeGreaterFilter, UtcDateTimeSmallerFilter,
+                           UtcDateTimeBetweenFilter, UtcDateTimeNotBetweenFilter,
+                           sqlafilters.FilterEmpty)
+
+    @filters.convert('utcdatetime')
+    def conv_utcdatetime(self, column, name, **kwargs):
+        return [f(column, name, **kwargs) for f in self.utcdatetime_filters]
 
 
 def wrapped_markdown(s, css_class=None):
