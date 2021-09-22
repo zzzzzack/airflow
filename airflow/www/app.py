@@ -21,6 +21,7 @@ import datetime
 import logging
 import os
 from typing import Any
+from hashlib import sha256
 
 import flask
 import flask_login
@@ -89,7 +90,12 @@ def create_app(config=None, testing=False):
     api.API_AUTH.api_auth.init_app(app)
 
     # flake8: noqa: F841
-    cache = Cache(app=app, config={'CACHE_TYPE': 'filesystem', 'CACHE_DIR': '/tmp'})
+    cache = Cache(app=app, config={
+        'CACHE_TYPE': 'filesystem',
+        'CACHE_DIR': '/tmp',
+        'CACHE_OPTIONS': {
+            'hash_method': sha256
+        }})
 
     app.register_blueprint(routes)
 
